@@ -1,0 +1,219 @@
+doctype html
+html
+    head
+        meta(charset='UTF-8')
+        title 网评员管理 | 指挥调度考核评估平台
+        link(href='/libs/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+        link(href='/css/nifty.min.css', rel='stylesheet')
+        link(href='/libs/awesome/css/font-awesome.min.css', rel='stylesheet')
+        link(href='/css/pace.css', rel='stylesheet')
+        link(href='/css/zeta.css', rel='stylesheet')
+        link(href='/css/style.css', rel='stylesheet')
+        link#theme(href='/css/themes/themes-navbar/theme-navy.min.css', rel='stylesheet')
+        style(type='text/css').
+            .jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background-color: #212633;border-radius: 2px;color: white;text-align: right;white-space: nowrap;padding: 7px 14px;z-index: 10000;}.jqsfield { color: white;font-size: 14;text-align: right;}
+        
+        script(src='/libs/jQuery/jquery-2.2.0.min.js')
+        script(src='/libs/la/vueUI.js')
+    body#cdtop.nifty-ready.pace-done
+        .pace.pace-inactive
+            .pace-progress(style='width: 100%;', data-progress-text='100%', data-progress='99')
+                .pace-progress-inner
+            .pace-activity
+        #container.effect.mainnav-lg.mainnav-fixed.aside-fixed.navbar-fixed.demo-set-no
+            header#navbar
+                #navbar-container.boxed
+                    .navbar-content.clearfix
+                        ul.nav.navbar-top-links.pull-left
+                            li.h50px
+                                .logowei
+                                    .pull-left
+                                        img(src='/img/logo.svg', width='30', height='27')
+                                    .pull-left.logowz
+                                        span.fonttxt 指挥调度考核评估平台
+                                        span.fonttxte Zhi Hui Diao Du Kao He Ping Gu Ping Tai
+                        ul.nav.navbar-top-links.pull-right
+                            li.dropdown.mega-dropdown.erweima.bianzuo
+                                a.text-center(href='tencent://message/?uin=2380671088&Site=QQ%E4%BA%A4%E8%B0%88&Menu=yes')
+                                    i.fa.fa-question-circle.fa-lg
+                                    span.font12.dx8  客服
+                            li.dropdown.mega-dropdown.erweima.bianzy
+                                a.text-center(href='javascript:', @click='logout')
+                                    i.fa.fa-sign-out.fa-lg
+                                    span.font12.dx8  退出
+                            li#dropdown-user.dropdown.zeta-bgcolor05
+                                a#reset-password-a.dropdown-toggle.text-right(href='javascript:void(0);')
+                                    span.pull-right
+                                        img.img-circle.img-user.media-object(@click="goRouter('/org/user/edit/0')", src='/img/user.png', alt='Profile Picture')
+                                    #userName.username.hidden-xs(@click='resetPassword')  
+                #page-title.zeta-bgcolorbai
+                    .title2y
+                        //- .bianyou.pull-left.juli-zy(v-for='first in menus')
+                        //-     a(:class="{'selected':nurl==first.url}", href='javascript:void(0);', @click='first.children.length>0?goRouter(first.children[0].url):goRouter(first.url)')
+                        //-         i(:class='first.ico')
+                        //-         span.menu-title.dx8.zeta-icon1  {{first.name}}
+                        #demo-theme.pull-right.juli-zy
+                            span.demo-theme.demo-a-navy.juli5px.disabled(data-theme='theme-navy', data-type='navbar', style='background:#E74C3C;', @click='tradeSkin')
+                            span.demo-theme.demo-a-ocean.juli5px(data-theme='theme-ocean', data-type='navbar', style='background:#1F74F2;', @click='tradeSkin')
+            #resetPassword-modal.modal(role='dialog', tabindex='-1', aria-labelledby='resetPassword-modal', aria-hidden='true', style='display: none;')
+                .modal-dialog(role='document')
+                    .modal-content
+                        .modal-header
+                            button.close(@click='hideResetPassword', type='button', data-dismiss='modal', aria-label='Close')
+                                span(aria-hidden='true') ×
+                            h4#dialog-title.modal-title 修改密码
+                        .modal-body(style='padding-bottom:0px')
+                            // 内容
+                            form#resetPassword-form.form-horizontal.bv-form(@submit.prevent='', action='/user/resetPassword', novalidate='novalidate')
+                                validator(name='validation')
+                                    .form-group.has-feedback
+                                        label.col-lg-3.control-label.font14.text-right 旧密码:
+                                        .col-lg-6
+                                            input.form-control(initial='off', detect-change='off', name='password', placeholder='请输入旧密码', type='password', v-validate:password="{ required: true, remote:'/user/isPassword'}", v-model='form.password')
+                                            i.form-control-feedback.fa.fa-check-circle.fa-lg.text-success(v-if='!$validation.password.pristine && $validation.password.valid')
+                                            small.help-block(v-if='$validation.password.required', data-bv-validator='notEmpty', data-bv-for='password', data-bv-result='NOT_VALIDATED')
+                                                | 旧密码不能为空
+                                            small.help-block(v-if='$validation.password.remote', data-bv-validator='notEmpty', data-bv-for='password', data-bv-result='INVALID')
+                                                | 密码不正确
+                                    .form-group.has-feedback
+                                        label.col-lg-3.control-label.font14.text-right 新密码:
+                                        .col-lg-6
+                                            input.form-control(initial='off', name='newpassword', placeholder='请输入旧密码', type='password', v-validate:newpassword='{required: true}', v-model='form.newpassword')
+                                            i.form-control-feedback.fa.fa-check-circle.fa-lg.text-success(v-if='!$validation.newpassword.pristine && $validation.newpassword.valid')
+                                            small.help-block(v-if='$validation.newpassword.required', data-bv-validator='notEmpty', data-bv-for='newpassword', data-bv-result='NOT_VALIDATED')
+                                                | 新密码不能为空
+                                    .form-group.has-feedback
+                                        label.col-lg-3.control-label.font14.text-right 确认密码:
+                                        .col-lg-6
+                                            input.form-control(initial='off', name='compassword', placeholder='请再次确认密码', type='password', v-validate:compassword='{required: true,equals:form.newpassword}', v-model='form.compassword')
+                                            i.form-control-feedback.fa.fa-check-circle.fa-lg.text-success(v-if='!$validation.compassword.pristine && $validation.compassword.valid')
+                                            small.help-block(v-if='$validation.compassword.required', data-bv-for='compassword', data-bv-result='NOT_VALIDATED')
+                                                | 请再次确认密码
+                                            small.help-block(v-if='$validation.compassword.equals', data-bv-for='compassword', data-bv-result='NOT_VALIDATED')
+                                                | 两次密码不一致
+                                    .modal-footer.text-center(style='margin:0 -15px; text-align: center;')
+                                        button#closeDialog.btn.btn-default(@click='hideResetPassword', data-dismiss='modal', type='button') 取消
+                                        button.btn.btn-bian.btn-labeled.fa.fa-check(@click='saveResetPassword', type='button') 确定
+                            // 内容
+            block content
+            footer#footer
+                // Visible when footer positions are fixed
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                .show-fixed.pull-right
+                    ul.footer-list.list-inline
+                        li
+                            p.text-sm 服务状态
+                            .progress.progress-sm.progress-light-base
+                                .progress-bar.progress-bar-danger(style='width: 80%')
+                        li
+                            p.text-sm 在线状态
+                            .progress.progress-sm.progress-light-base
+                                .progress-bar.progress-bar-primary(style='width: 80%')
+                        li
+                .hide-fixed.pull-right.pad-rgt 当前版本 v1.0.1
+                p.pad-lft © 2016 指挥调度考核评估平台
+            button#scroll-top.btn(style='margin-bottom:-55px;')
+                i.fa.fa-chevron-up
+        script(src='/js/pace.js')
+        script(src='/libs/la/template.js')
+        
+        script(src='/libs/jQuery/jquery.bootstrapNews.js')
+        
+        script(src='/js/bootstrap.js')
+        
+        script(src='/js/bootbox.js')
+        
+        script(src='/js/plugins.js')
+        
+        script(src='/js/echarts.js')
+        
+        script(src='/libs/echarts/theme/macarons.js')
+        script#nav(type='html/text').
+            {{each list as first i}}
+                  <div class="bianyou pull-left juli-zy">
+                  <a class="{{first.class}}" href="{{first.nurl}}">
+                  <i class='{{first.ico}}'></i>
+                  <span class="menu-title dx8 zeta-icon1"> {{first.name}}</span>
+                  </a>
+                  </div>
+              {{/each}}
+        script(type='text/javascript').
+            (function(){
+                function fillUser(){
+                    vueUI.ajaxCall({
+                        type:"get",
+                        url:vueUI.conf.host+"/user/get_curr_user",
+                        success:function(rsp){
+                            $("#userName").html(rsp.data.fullname);
+                            $("#theme").attr("href","/css/themes/themes-navbar/"+rsp.data.themeOfPc+".min.css");
+                            $("span[data-theme='"+rsp.data.themeOfPc+"']").addClass("disabled");
+                            $("span[data-theme='"+rsp.data.themeOfPc+"']").siblings("span").removeClass("disabled");
+                        }
+
+                    }) 
+                };
+                function getLoginUid(){
+                    vueUI.ajaxCall({
+                        url:vueUI.conf.host+"/user/getLoginUID",
+                        success:function(rsp){
+                            var _loginUID = rsp.data;
+                            window.sessionStorage.setItem('loginUID',_loginUID)
+                        }
+                    })
+                };
+                function getPrivilege(){
+                    vueUI.ajaxCall({
+                        url:vueUI.conf.host+"/user/get_privileges",
+                        type:"GET",
+                        success:function (rsp){
+                            var dt = rsp.data;
+                            var arrp=[];
+                            var arrc=[];
+                            for(var i=0;i<dt.length;i++){
+                                if(dt[i].parentId){
+                                    arrc.push(dt[i])
+                                }else{
+                                    arrp.push(dt[i])
+                                }
+                            };
+                            for(var i=0;i<arrp.length;i++){
+                                for(var j=0;j<arrc.length;j++){
+                                    if(arrc[j].parentId==arrp[i].id){
+                                        arrp[i].children.push(arrc[j]);
+                                    }
+                                }
+                            };
+                            var la={menus:arrp};
+                            window.la=la;
+                            if(window.location.pathname=='/'){
+                                if(arrp[0].children.length>0){
+                                    window.location.href=arrp[0].children[0].url;
+                                }else{
+                                    window.location.href=arrp[0].url;
+                                }
+                            };
+                            //- 渲染权限
+                            var purl="/"+window.location.pathname.split("/")[1];
+                            for(var i=0;i<arrp.length;i++){
+                                if(arrp[i].url==purl){
+                                    arrp[i].class="selected"
+                                };
+                                if(arrp[i].children.length>0){
+                                    arrp[i].nurl=arrp[i].children[0].url
+                                }else{
+                                    arrp[i].nurl=arrp[i].url
+                                }
+                            };
+                            
+                            var data = {
+                                list: arrp
+                            };
+                            var html = template('nav', data);
+                            $("div#page-title .title2y").prepend(html);
+                        }
+                    });
+                };
+                getLoginUid();
+                fillUser();
+                getPrivilege();
+            })();

@@ -1,0 +1,97 @@
+<div class="row zeta-bgcolor-bai1" id="usertree">
+    <div class="col-md-12  zeta-bgcolorbai bianzuo bianyou">
+        <div class="panel-body">
+
+            <form @submit.prevent id="save-form" action="#" class="form-horizontal bv-form" novalidate="novalidate">
+            	<fieldset>
+	                <div class="panel-body">
+	                    <div class="row">
+                        	<div class="col-lg-6">
+                        		<div class="form-group">
+                        			<label class="col-lg-4 control-label font14 text-right">用户组织</label>
+                        			<div class="col-lg-8">
+                        				 <input type="text" class="btn btn-default w100"  placeholder="选择用户组织"  @click="showTree" />
+                        			</div>
+                        		</div>
+                        		
+                        		<div class="form-group">
+                        			<label class="col-lg-4 control-label font14 text-right">orgIds</label>
+                        			<div class="col-lg-8">
+                        				 <input type="text" class="btn btn-default w100"  name="orgIds" />
+                        			</div>
+                        		</div>
+                        		
+                        		<div class="form-group">
+                        			<label class="col-lg-4 control-label font14 text-right">orgNames</label>
+                        			<div class="col-lg-8">
+                        				 <input type="text" class="btn btn-default w100"  name="orgNames" />
+                        			</div>
+                        		</div>
+                        		
+                        		
+                        		<div class="form-group">
+                        			<label class="col-lg-4 control-label font14 text-right">userIds</label>
+                        			<div class="col-lg-8">
+                        				 <input type="text" class="btn btn-default w100"  name="userIds" />
+                        			</div>
+                        		</div>
+                        		
+                        		
+                        		<div class="form-group">
+                        			<label class="col-lg-4 control-label font14 text-right">userNames</label>
+                        			<div class="col-lg-8">
+                        				 <input type="text" class="btn btn-default w100"  name="userNames" />
+                        			</div>
+                        		</div>
+                        		
+                        		
+                        		
+                        		
+                        		
+                        	</div>
+                        </div>
+	                </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+ <div id="organization-tree-modal" class="mainnav-menu bootbox modal" tabindex="-1" role="dialog" style="display: none">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" @click="hideTree">×
+                    </button>
+                    <h4 class="modal-title">组织架构</h4></div>
+                <div class="modal-body">
+                    <div class="bootbox-body">
+                        <nav class="vbox vbox1  biank" style=" height:400px;">
+                            <div class="panel-titlez bianxia  zeta-bgcolor-bai3">
+                                <div class="input-group w160px pull-left"><input class="form-control" name="orgName"
+                                                                                 placeholder="输入关键字" type="text"><span
+                                        class="input-group-btn"><button class="btn btn-tmbai btn-sm" type="button"
+                                                                        @click="getTree"><i
+                                        class="fa fa-search fa-lg"></i></button></span></div>
+                            </div>
+                            <div class="scrollable hover w100" style="margin-top: 53px;">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <ul id="org-list" v-tree="tree" class="mainnav-menu list-group orgTree" style="margin-bottom: 0px;">
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-bb-handler="main" type="button" class="btn btn-bian2 submit-form" @click="hideTree">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,101 @@
+					<div class="panel-body" id="setuser">
+                    <form @submit.prevent v-on:onload="search()" id="query-form" class="form-horizontal" role="form" method="post" action="/user/query">
+                        <input type="hidden" name="page_pageNo" id="pageNo" value="1" />
+                        <input type="hidden" name="page_pageSize" id="pageSize" value="10" />
+                        <input type="hidden" name="page_order" id="order" value="desc" />
+                        <input type="hidden" name="page_orderBy" id="orderBy" value="id" />
+                        <input type="hidden" name="filter_EQI_state" value="" id="state">
+                        <input type="hidden" name="orgIds" value="" >
+                        <input type="hidden" name="orgIdPattern" value="eq" >
+                        <input type="hidden" name="queryType" value="1" >
+                        <input type="hidden" name="parentOrgId" value="" v-model="parentOrgId">
+                    
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <div class="input-group w200px pull-left m-y5">
+                                    <input placeholder="输入名称关键字" @keyup="queryOfName" maxlength="100" name="fullname" class="form-control" type="text">
+                                      <span class="input-group-btn">
+                                        <button @click="search()" class="btn btn-tmbai btn-sm">检索</button>
+                                      </span>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-7 text-right">
+                                <div class="pull-right">
+                                    <button class="btn btn-tmbai btn-sm" id="add-settings-user-btn" @click="goAdd"><i class="fa fa-plus"></i> 新增</button>
+                                    <button class="btn btn-tmbai btn-sm" @click="enable"><i class="fa-circle-thin fa"></i> 启用</button>
+                                    <button class="btn btn-tmbai btn-sm" @click="disable"><i class="fa fa-minus-circle"></i> 禁用</button>
+                                    <button data-target="" class="btn btn-tmbai btn-sm" v-on:click="goDel"><i class="fa fa-minus"></i> 删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- 列表展示 -->
+                    <vue-grid target="setuser" v-ref:grid :columns="gridColumns" ></vue-grid>
+                        
+                        <div class="modal" id="catalog-modal" role="dialog" tabindex="-1" aria-labelledby="catalog-modal" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button @click="hideadd" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="dialog-title">权限设置</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:0px">
+            <!--内容-->
+            <form class="form-horizontal bv-form" id="catalog-form" novalidate="novalidate"><button type="submit" class="bv-hidden-submit" style="display: none; width: 0px; height: 0px;"></button>      
+            
+                <div class="form-group has-feedback">
+                    <label class="col-lg-3 control-label font14 text-right">名称:</label>
+                    <div class="col-lg-6">
+                      <input class="form-control" name="catalogScore" placeholder="请输入权限名称" >
+                    </div>
+                </div>
+                
+                <div class="form-group has-feedback">
+                     <label class="col-lg-3 control-label font14 text-right">所属权限:</label>
+                     <div class="col-lg-6">   
+                     <input name="originalCatalogType" value="" type="hidden">
+                         <select name="catalogType" class="form-control selectpicker" title="选择任务类型" data-bv-field="catalogType">
+                           <option value="0">系统设置</option>
+                           <option value="1">舆情管理</option>
+                        </select><i style="display: none;" class="form-control-feedback" data-bv-icon-for="catalogType"></i>
+                      <small style="display: none;" class="help-block" data-bv-validator="notEmpty" data-bv-for="catalogType" data-bv-result="NOT_VALIDATED">请选择分类类型.</small></div>                  
+                </div> 
+                
+                <div class="form-group has-feedback">
+                    <label class="col-lg-3 control-label font14 text-right">地址:</label>
+                    <div class="col-lg-6">
+                      <input class="form-control" name="catalogScore" placeholder="请输入权限地址" >
+                    </div>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="col-lg-3 control-label font14 text-right">图标:</label>
+                    <div class="col-lg-6">
+                      <input class="form-control" name="catalogScore" placeholder="请输入权限图标" >
+                    </div>
+                </div>
+                
+               <div class="form-group">
+                 <label class="col-lg-3 control-label font14 text-right">状态:</label>
+                 <div class="col-lg-9">                   
+                     <div class="radio" id="role-status-radio">
+                         <label class="form-radio form-icon active">
+                           <input checked="" class="ico-w-label" name="catalogStatus" value="1" type="radio"> 启用</label>
+                          <label class="form-radio form-icon">
+                          <input class="ico-w-label" name="catalogStatus" value="0" type="radio"> 禁用</label>
+                     </div>                
+                  </div>                  
+                </div> 
+                 
+                <div class="modal-footer text-center" style="margin:0 -15px">
+                  <button @click="hideadd" data-dismiss="modal" type="button" class="btn btn-default" id="closeDialog">取消</button>
+                  <button @click="hideadd" type="button" class="btn btn-bian btn-labeled fa fa-check">确定</button>
+                </div>                              
+            </form>
+              <!--内容-->
+          </div>     
+        </div>
+      </div>
+    </div>
+    </div>

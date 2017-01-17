@@ -1,0 +1,141 @@
+extends ../org
+
+block org
+    #setuser.panel-body
+        form#query-form.form-horizontal(@submit.prevent='', v-on:onload='search()', role='form', method='post', action='/user/query')
+            input#pageNo(type='hidden', name='page_pageNo', value='1')
+            input#pageSize(type='hidden', name='page_pageSize', value='10')
+            input#order(type='hidden', name='page_order', value='desc')
+            input#orderBy(type='hidden', name='page_orderBy', value='id')
+            input#state(type='hidden', name='filter_EQI_state', value='')
+            input(type='hidden', name='orgIds', value='')
+            input(type='hidden', name='orgIdPattern', value='eq')
+            input(type='hidden', name='queryType', value='1')
+            input(type='hidden', name='parentOrgId', value='', v-model='parentOrgId')
+            .row
+                .col-xs-5
+                    .input-group.w200px.pull-left.m-y5
+                        input.form-control(placeholder='输入名称关键字', @keyup='queryOfName', maxlength='100', name='fullname', type='text')
+                        span.input-group-btn
+                            button.btn.btn-tmbai.btn-sm(@click='search()') 检索
+                .col-xs-7.text-right
+                    .pull-right
+                        button#add-settings-user-btn.btn.btn-tmbai.btn-sm(@click='goAdd')
+                            i.fa.fa-plus
+                            |  新增
+                        button.btn.btn-tmbai.btn-sm(@click='enable')
+                            i.fa-circle-thin.fa
+                            |  启用
+                        button.btn.btn-tmbai.btn-sm(@click='disable')
+                            i.fa.fa-minus-circle
+                            |  禁用
+                        button.btn.btn-tmbai.btn-sm(data-target='', v-on:click='goDel')
+                            i.fa.fa-minus
+                            |  删除
+        // 列表展示
+        #table-top.zeta-table-bk
+            table.table-striped.zeta-table(style='table-layout: fixed;')
+                tbody
+                    tr.table-head
+                        th.text-center(style='width:60px;') 序号 
+                        th.text-left
+                            span(title='姓名') 姓名
+                            span
+                        th.text-left
+                            span(title='所属组织') 所属组织
+                            span
+                        th.text-left
+                            span(title='角色') 角色
+                            span
+                        th.zeta-showno
+                            span(title='省级负责人') 省级负责人
+                            span
+                        th.zeta-showno
+                            span(title='片区负责人') 片区负责人
+                            span
+                        th.text-left(style='width: 200px;')
+                            span(title='邮箱') 邮箱
+                            span
+                        th.rank-th.text-center
+                            span(title='手机') 手机
+                            span
+                        th.rank-th.text-center(style='width: 55px;')
+                            span(title='状态') 状态
+                            span
+                        th.rank-th.text-center(style='width: 50px;')  编辑 
+                        th.rank-th.text-center(style='width: 50px;')  删除 
+                        th.text-center(style='width:60px;')
+                            input(type='checkbox')
+                    tr
+                        td(style='text-align:center') 1
+                        td.text-left(style='overflow-wrap: break-word;')
+                            span(title='管理员') 管理员
+                        td.text-left(style='overflow-wrap: break-word;')
+                            span
+                                .label.label-success.text-lg(title='总公司') 总公司
+                        td.text-left(style='overflow-wrap: break-word;')
+                            span(title='超级管理员') 超级管理员
+                        td.zeta-showno(style='cursor: pointer;')
+                            span
+                        td.zeta-showno(style='cursor: pointer;')
+                            span
+                        td.text-left(style='overflow-wrap: break-word;')
+                            span(title='1910163785@qq.com') 1910163785@qq.com
+                        td.text-center(style='overflow-wrap: break-word;')
+                            span(title='13209876532') 13209876532
+                        td.text-center(style='overflow-wrap: break-word;')
+                            span
+                                span(title='启用') 启用
+                        td.control-table-list.text-center(style='word-wrap:break-word')
+                            a(href='javascript:void(0)')
+                                i.fa-lg.fa-pencil-square-o.fa.btn
+                        td.control-table-list.text-center(style='word-wrap:break-word')
+                            a(href='javascript:void(0)')
+                                i.fa-lg.fa-trash.fa.btn
+                        td.text-center
+                            input(name='checkbox2', value='1', type='checkbox')
+        #catalog-modal.modal(role='dialog', tabindex='-1', aria-labelledby='catalog-modal', aria-hidden='true', style='display: none;')
+            .modal-dialog(role='document')
+                .modal-content
+                    .modal-header
+                        button.close(@click='hideadd', type='button', data-dismiss='modal', aria-label='Close')
+                            span(aria-hidden='true') ×
+                        h4#dialog-title.modal-title 权限设置
+                    .modal-body(style='padding-bottom:0px')
+                        // 内容
+                        form#catalog-form.form-horizontal.bv-form(novalidate='novalidate')
+                            button.bv-hidden-submit(type='submit', style='display: none; width: 0px; height: 0px;')
+                            .form-group.has-feedback
+                                label.col-lg-3.control-label.font14.text-right 名称:
+                                .col-lg-6
+                                    input.form-control(name='catalogScore', placeholder='请输入权限名称')
+                            .form-group.has-feedback
+                                label.col-lg-3.control-label.font14.text-right 所属权限:
+                                .col-lg-6
+                                    input(name='originalCatalogType', value='', type='hidden')
+                                    select.form-control.selectpicker(name='catalogType', title='选择任务类型', data-bv-field='catalogType')
+                                        option(value='0') 系统设置
+                                        option(value='1') 舆情管理
+                                    i.form-control-feedback(style='display: none;', data-bv-icon-for='catalogType')
+                                    small.help-block(style='display: none;', data-bv-validator='notEmpty', data-bv-for='catalogType', data-bv-result='NOT_VALIDATED') 请选择分类类型.
+                            .form-group.has-feedback
+                                label.col-lg-3.control-label.font14.text-right 地址:
+                                .col-lg-6
+                                    input.form-control(name='catalogScore', placeholder='请输入权限地址')
+                            .form-group.has-feedback
+                                label.col-lg-3.control-label.font14.text-right 图标:
+                                .col-lg-6
+                                    input.form-control(name='catalogScore', placeholder='请输入权限图标')
+                            .form-group
+                                label.col-lg-3.control-label.font14.text-right 状态:
+                                .col-lg-9
+                                    #role-status-radio.radio
+                                        label.form-radio.form-icon.active
+                                            input.ico-w-label(checked='', name='catalogStatus', value='1', type='radio')
+                                            |  启用
+                                        label.form-radio.form-icon
+                                            input.ico-w-label(name='catalogStatus', value='0', type='radio')
+                                            |  禁用
+                            .modal-footer.text-center(style='margin:0 -15px')
+                                button#closeDialog.btn.btn-default(@click='hideadd', data-dismiss='modal', type='button') 取消
+                                button.btn.btn-bian.btn-labeled.fa.fa-check(@click='hideadd', type='button') 确定

@@ -1,0 +1,218 @@
+extends ../layout
+
+block content
+    .boxed
+        #content-container
+            #page-content
+                .row
+                    .col-xs-12
+                        .panel-titlez.font14.fontcu.zeta-bgcolor02
+                            button.btn.btn-tm1.btn-sm.pull-right(onclick='javascript:history.go(-1)', type='submit')
+                                i.fa.fa-arrow-circle-left
+                                |  返回
+                        hr.fgx
+                        block org
+    nav#mainnav-container
+        nav.vbox.bianyou
+            // 菜单
+            .panel-titlez.bianxia.zeta-bgcolor-bai3
+                form#orgTree-form.form-horizontal.bv-form(@submit.prevent='', novalidate='novalidate')
+                    .input-group.w160px.pull-left
+                        input.form-control(type='text', name='orgName', placeholder='输入组织关键字')
+                        span.input-group-btn
+                            button.btn.btn-tmbai.btn-sm.orgTreeBtn(target='0', type='button', onclick='getTree()')
+                                i.fa.fa-search-plus.fa-lg
+            // 菜单
+            #mainnav.scrollable.hover(style='margin-top: 53px;height: auto;')
+                // 表格4
+                .row
+                    .col-xs-12.org
+                        ul#mainnav-menu.list-group.orgTree(v-tree='tree', style='margin-bottom: 0px;')
+                // 表格4 end
+    script#orgnav(type='html/text').
+        {{each list as mu i}}
+            <a href="{{mu.ur}}">
+                <span class="{{mu.class}}" data-url="{{mu.url}}">{{mu.name}}</span>
+            </a>
+        {{/each}}
+    script(type='text/javascript').
+        (function(){
+            //菜单栏填充
+            var arr;
+            var loop=setInterval(function(){
+                if(window.la){
+                    clearInterval(loop);
+                    arr=window.la.menus;
+                    var menus=[];
+                    for(var i=0;i<arr.length;i++){
+                        if(arr[i].url=='/org'){
+                            menus=arr[i].children;
+                            break;
+                        }
+                    };
+                    for(var i=0;i<menus.length;i++){
+                        if(menus[i].url==window.location.pathname){
+                            menus[i].class="lanmu2 lanmuz"
+                        }else{
+                            menus[i].class="lanmu2"
+                        }
+                    };
+                    var data = {
+                        list: menus
+                    };
+                    var html = template('orgnav', data);
+                    $("div#page-content div.row div.col-xs-12 div.panel-titlez").append(html);
+                }
+            },30);
+
+            //获取角色树数据
+            function getTree(){
+                var form=$("#orgTree-form");
+                var josn=JSON.stringify($('#orgTree-form').serializeObject());
+                vueUI.ajaxCall({
+                    url:vueUI.conf.host+"/organization/tree/",
+                    data:josn,
+                    type:"POST",
+                    success:function(rsp){
+                        recursive(rsp.data);
+                        $("ul:eq(0)","ul#mainnav-menu").addClass("in");
+                        if($("ul#mainnav-menu").find('i:eq(0)').hasClass('fa-plus-square')){
+                            $("ul#mainnav-menu").find('i:eq(0)').removeClass('fa-plus-square');
+                            $("ul#mainnav-menu").find('i:eq(0)').addClass('fa-minus-square');
+                        }
+                    }
+                });
+            };
+
+            //角色树渲染
+            function recursive (argument) {
+                var t=0;
+                for(var i=0;i<argument.length;i++){
+                    if(!argument[i].show||argument[i].show!=1||!argument[i].show||argument[i].show!='1')continue;
+                    if(argument[i].children.length>0){
+                        var _type = 0;
+                        if(typeof(argument[i].type)!="undefined" && argument[i].type!=""){
+                            _type = argument[i].type;
+                        }
+                        var dom='<li class="subNode-expand" data-node-type="'+_type+'" data-node-id="'+argument[i].id+'" data-node-pid="'+argument[i].parentId+'" data-node-name="'+argument[i].name+'">'+
+                            '<a class="orgnization-name">'+
+                                '<i class="fa '+(_type=="0"?"fa-plus-square":"fa-user")+'"></i>'+
+                                '<span class="menu-title dx8" data-node-index="'+argument[i].id+'">'+argument[i].name+'</span>'+
+                            '</a>'+
+                          '<div class="pull-right" style=" padding-top:15px;">'+
+                            '<span class="anshowno zeta-showno anbj">'+
+                                '<a href="#"><i class="fa fa-pencil fa-lg"></i></a>'+
+                                '<a href="#"><i class="fa fa-fa fa-times fa-lg"></i></a>'+
+                                '<a href="#"><i class="fa fa fa-plus fa-lg"></i></a>'+
+                            '</span>'+
+                            '<label class="form-checkbox form-icon"><input class="org-checkbox" type="checkbox"></label>'+
+                        '</div>'+ 
+                        '<ul class="zeta-bgcolor05 collapse">'+
+                        '</ul>'+
+                      '</li>';
+                      if($("li[data-node-id='"+argument[i].parentId+"']","ul#mainnav-menu").length==0){
+                          $("ul#mainnav-menu").append(dom);
+                      }else{
+                          $("li[data-node-id='"+argument[i].parentId+"']","ul#mainnav-menu").children("ul").append(dom);
+                      };
+                recursive(argument[i].children)
+                    }else{
+                        var _type = 0;
+                        if(typeof(argument[i].type)!="undefined" && argument[i].type!=""){
+                            _type = argument[i].type;
+                        }
+                        var domb='<li data-node-type="'+_type+'" data-node-id="'+argument[i].id+'" data-node-pid="'+argument[i].parentId+'" data-node-name="'+argument[i].name+'">'+
+                            '<a class="orgnization-name">'+
+                                '<i class="fa '+(_type=="0"?"fa-minus-square":"fa-user")+'"></i>'+
+                                '<span class="menu-title dx8" data-node-index="'+argument[i].id+'">'+argument[i].name+'</span>'+
+                            '</a>'+
+                          '<div class="pull-right" style=" padding-top:15px;">'+
+                              '<span class="anshowno zeta-showno anbj">'+
+                                  '<a href="#"><i class="fa fa-pencil fa-lg"></i></a>'+
+                                  '<a href="#"><i class="fa fa-fa fa-times fa-lg"></i></a>'+
+                                  '<a href="#"><i class="fa fa fa-plus fa-lg"></i></a>'+
+                              '</span>'+
+                              '<label class="form-checkbox form-icon">'+
+                                  '<input class="org-checkbox" type="checkbox">'+
+                              '</label>'+
+                          '</div>'+
+                      '</li>';
+                      if($("li[data-node-id='"+argument[i].parentId+"']","ul#mainnav-menu").length==0){
+                          $("ul#mainnav-menu").append(domb);
+                      }else{
+                          $("li[data-node-id='"+argument[i].parentId+"']","ul#mainnav-menu").children("ul").append(domb);
+                      };
+                    }
+                }
+            };
+
+            function loadm(){
+                //树形菜单的点击事件
+                $("#mainnav-menu").on('click', 'li.subNode-expand>a',
+                function(e) {
+                    $(this).find('i.fa').toggleClass("fa-plus-square").toggleClass("fa-minus-square");
+
+                    //同级节点样式变更
+                    $(this).closest("li").siblings("li").children("a").find('i.fa-minus-square').toggleClass("fa-plus-square").toggleClass("fa-minus-square");
+                    //子节点的展开和隐藏
+                    //- var subUl = $(this).parent('li').find('ul.zeta-bgcolor05:eq(0)');
+                    //- var expandLi = $(this).parent('li').find('.subNode-expand');
+                    //- var subLiai= $(this).parent('li').siblings("li").children("a").find('i.fa');
+                    //- $(subLiai).addClass("fa-plus-square");
+                    //- $(subLiai).removeClass("fa-minus-square");
+
+                    //- if ($(this).find('i.fa:eq(0)').hasClass('fa-minus-square')) {
+
+                    //-     $(subUl).collapse('show');
+         
+                    //- } else {
+                    //-     $(this).parent('li').find('ul.zeta-bgcolor05').collapse('hide');
+
+                    //-     expandLi.children('a').find('i.fa').addClass("fa-plus-square").removeClass("fa-minus-square");
+                    //- }
+                });
+                //绑定输入事件
+                $('[name="orgName"]').bind('input',function(){
+                    self.getTree();
+                    $('.org li.subNode-expand>a').trigger('click');
+                });
+                //绑定复选框事件
+                $("#mainnav-menu").on('click', '.org-checkbox',
+                function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(!$(this).parent('label').hasClass('disabled')){
+                        var currentLabel=$(this).parent('label');
+                        
+                        
+                        if($(currentLabel).hasClass('active')){
+                            $('[name="parentOrgId"]').val('');
+                        }else{
+                             var parentOrgId = $(this).closest('li').attr('data-node-pid');
+                             if(parentOrgId==7||parentOrgId==145||parentOrgId==146||parentOrgId==147||parentOrgId==148||parentOrgId==149)
+                             $('[name="parentOrgId"]').val(parentOrgId);
+                        }
+                        
+                        currentLabel.toggleClass('active');
+                       
+                    }
+                    
+                   
+                    
+                    
+                    var ids=[];
+                    $('.org li label.active').each(function(index,items){
+                        ids.push($(items).closest('li').attr('data-node-id'));
+                    });
+                    $('[name="orgIds"]').val(ids.toString());
+                    console.log(ids.toString())
+                    //- self.$children[0].search(1);
+                    
+                    
+                });
+            };
+            
+            getTree();
+            loadm();
+        })()
+    

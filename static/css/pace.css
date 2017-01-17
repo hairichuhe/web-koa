@@ -1,0 +1,60 @@
+.pace {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,.95);
+	z-index: 9999;
+	max-height: 100%
+}
+.nifty-ready .pace {
+	max-height: 3px;
+	background-color: rgba(255,255,255,0);
+	-webkit-transition: background-color 1s linear 1s, max-height .2s linear 2s;
+	transition: background-color 1s linear 1s, max-height .2s linear 2s
+}
+.pace:before {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 3px;
+	background-color: rgba(255,255,255,.3);
+	position: absolute
+}
+.pace-inactive {
+	display: none
+}
+.pace-running .pace-progress {
+	height: 3px;
+	z-index: 2;
+	position: relative
+}
+.pace-running .pace-activity {
+	font-size: 2px;
+	position: absolute;
+	top: 50%;
+	right: 50%;
+	width: 50px;
+	height: 50px;
+	margin: -25px -25px 0 0;
+
+  	-webkit-animation: fold 1.2s infinite ease-in-out;
+  	animation: fold 1.2s infinite ease-in-out;
+}
+@-webkit-keyframes fold {
+  0% { -webkit-transform: perspective(120px) }
+  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+ 
+@keyframes fold {
+  0% {
+    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+  } 50% {
+    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+  } 100% {
+    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+  }
+}

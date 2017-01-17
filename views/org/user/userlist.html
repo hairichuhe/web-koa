@@ -1,0 +1,32 @@
+					<div class="panel-body" id="userlist">
+                    <form @submit.prevent v-on:onload="search()" id="query-form" class="form-horizontal" role="form" method="post" action="/user/query">
+                        <input type="hidden" name="page_pageNo" id="pageNo" value="1" />
+                        <input type="hidden" name="page_pageSize" id="pageSize" value="10" />
+                        <input type="hidden" name="page_order" id="order" value="desc" />
+                        <input type="hidden" name="page_orderBy" id="orderBy" value="id" />
+                        <input type="hidden" name="filter_EQI_state" value="" id="state">
+                        <input type="hidden" name="orgIds" value="" >
+                        <input type="hidden" name="orgIdPattern" value="eq" >
+                        <input type="hidden" name="parentOrgId" value="" v-model="parentOrgId">
+                        
+                    
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <div class="input-group w200px pull-left m-y5">
+                                    <input placeholder="输入名称关键字" maxlength="100" @keyup="queryOfName" name="fullname" class="form-control" type="text">
+                                      <span class="input-group-btn">
+                                        <button @click="search()" class="btn btn-tmbai btn-sm">检索</button>
+                                      </span>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-7 text-right">
+                                <div class="pull-right">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- 列表展示 -->
+                    <vue-grid target="userlist" :hide-Checkbox="true" v-ref:grid :columns="gridColumns" ></vue-grid>
+                   </div>

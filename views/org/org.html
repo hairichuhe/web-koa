@@ -1,0 +1,56 @@
+<div class="boxed">
+    <div id="content-container">
+        <div id="page-content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel-titlez font14 fontcu zeta-bgcolor02">
+                        <!-- <a v-for="mu in menus"  href="javascript:void(0);" @click="goRouter(mu.url)">
+                            
+                            <span v-if="mu.url==firstm" class="lanmu2  lanmuz">{{mu.name}}</span>
+                            <span v-else class="lanmu2 ">{{mu.name}}</span>
+                        </a> -->
+                        <button class="btn btn-tm1 btn-sm pull-right" onclick="javascript:history.go(-1)" type="submit"><i class="fa fa-arrow-circle-left"></i> 返回
+                        </button>
+                        <a href="javascript:void(0);" @click="goRouter('/user')">
+                            <span class="lanmu2" :class="$route.path=='/org'||$route.path=='/org/user'?'lanmuz':''">网评员管理</span>
+                        </a>
+                        <a href="javascript:void(0);" @click="goRouter('/organization')">
+                            <span :class="$route.path=='/org/organization'?'lanmuz':''" class="lanmu2">组织管理</span>
+                        </a>
+                        <a href="javascript:void(0);" @click="goRouter('/usertree')">
+                            <span :class="$route.path=='/org/usertree'?'lanmuz':''" class="lanmu2" :class="">用户组织树测试</span>
+                        </a>
+                    </div>
+                    <hr class="fgx">
+                    <router-view></router-view>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<nav id="mainnav-container">
+    <nav class="vbox bianyou">
+        <!--菜单-->
+        <div class="panel-titlez bianxia zeta-bgcolor-bai3">
+            <form @submit.prevent id="orgTree-form" class="form-horizontal bv-form" novalidate="novalidate">
+                <div class="input-group w160px pull-left">
+                    <input type="text" class="form-control" name="orgName" placeholder="输入组织关键字">
+                    <span class="input-group-btn">
+                                <button class="btn btn-tmbai btn-sm orgTreeBtn" target="0" type="button" @click="getTree()"><i class="fa fa-search-plus fa-lg"></i></button>
+                            </span>
+                </div>
+            </form>
+        </div>
+        <!--菜单-->
+        <div id="mainnav" class="scrollable hover" style="margin-top: 53px;height: auto;">
+            <!--表格4-->
+            <div class="row">
+                <div class="col-xs-12 org">
+                    <ul id="mainnav-menu" v-tree="tree" class="list-group orgTree" style="margin-bottom: 0px;">
+                    </ul>
+                </div>
+            </div>
+            <!--表格4 end-->
+        </div>
+    </nav>
+</nav>

@@ -1,0 +1,352 @@
+<div class="row zeta-bgcolor-bai1" id="userinput">
+    <div class="col-md-12  zeta-bgcolorbai bianzuo bianyou">
+        <div class="panel-body">
+
+            <form @submit.prevent id="save-form" action="/user/save" class="form-horizontal bv-form" novalidate="novalidate">
+            <fieldset>
+                <button type="submit" class="bv-hidden-submit" style="display: none; width: 0px; height: 0px;"></button>
+                <div class="panel-body">
+                    <validator name="validation">
+                        <input type="hidden" name="id" value="{{$route.params.id}}" v-model="user.id">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right"><i class="fa fa-asterisk text-danger"></i>账号名称</label>
+                              <div class="col-lg-8">
+                                <input :disabled="isInfo=='0'"  initial="off" detect-change="off" @keyup="filterval" class="form-control" name="username" placeholder="请输入用户名" type="text" v-validate:username="{ required: true, remote:['/user/isUnqiue',{id:$route.params.id,originalName:usertemp.username}]}" v-model="user.username">
+                                <i v-if="!$validation.username.pristine && $validation.username.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                                    <small v-if="$validation.username.required" class="help-block" data-bv-validator="notEmpty"
+                                           data-bv-for="username" data-bv-result="NOT_VALIDATED">账号名称不能为空
+                                    </small>
+                                    <small v-if="$validation.username.remote" class="help-block" data-bv-validator="notEmpty"
+                                           data-bv-for="username" data-bv-result="INVALID">此账号已存在,请更换
+                                    </small>
+                                    
+                              </div>
+                            </div>
+                          </div>
+                          
+                          
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right"><i class="fa fa-asterisk text-danger"></i>真实姓名</label>
+                              <div class="col-lg-8">
+                                <input initial="off" class="form-control" name="fullname" placeholder="请输入真实姓名" type="text" v-validate:fullname="{ required: true }" v-model="user.fullname">
+                                    <i v-if="!$validation.fullname.pristine && $validation.fullname.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                                    <small v-if="$validation.fullname.required" class="help-block" data-bv-validator="notEmpty"
+                                           data-bv-for="fullname" data-bv-result="NOT_VALIDATED">真实姓名不能为空
+                                    </small>
+                              </div>
+                            </div>
+                          </div>
+                        
+                        </div>
+                        
+                        
+                        <div class="row password">
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right"><i class="fa fa-asterisk text-danger"></i>账号密码</label>
+                              <div class="col-lg-8">
+                                <input initial="off" class="form-control" name="password" placeholder="请输入密码" type="text" v-validate:password="{ required: true }" v-model="user.password">
+                                    <i v-if="!$validation.password.pristine && $validation.password.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                                    <small v-if="$validation.password.required" class="help-block" data-bv-validator="notEmpty"
+                                           data-bv-for="password" data-bv-result="NOT_VALIDATED">账号密码不能为空
+                                    </small>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right"><i class="fa fa-asterisk text-danger"></i>确认密码</label>
+                              <div class="col-lg-8">
+                                <input initial="off" class="form-control" placeholder="请再次确认密码" type="text" v-validate:compassword="{ required: true,equals:user.password }" v-model="user.compassword" >
+                                <i v-if="!$validation.compassword.pristine && $validation.password.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                                    <small v-if="$validation.compassword.required" class="help-block" data-bv-validator="notEmpty"
+                                           data-bv-for="compassword" data-bv-result="NOT_VALIDATED">请再次确认密码
+                                    </small>
+                                    <small v-if="$validation.compassword.equals" class="help-block" data-bv-validator="notEmpty"
+                                           data-bv-for="compassword" data-bv-result="NOT_VALIDATED">两次密码不一致
+                                    </small>
+                              </div>
+                            </div>
+                          </div>
+                        
+                        </div>
+                        
+                        
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right">手机号码</label>
+                              <div class="col-lg-8">
+                                <input initial="off" class="form-control" name="mobile" placeholder="请输入手机号码" type="text" v-validate:mobile="{ isMobile:true }" v-model="user.mobile">
+                                <i v-if="!$validation.mobile.pristine && $validation.mobile.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                                    <small v-if="$validation.mobile.isMobile" class="help-block" 
+                                           data-bv-for="mobile" data-bv-result="NOT_VALIDATED">手机号码格式不正确
+                                    </small>
+                                
+                                
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right">邮箱地址</label>
+                              <div class="col-lg-8">
+                                <input initial="off" class="form-control" name="email" placeholder="请输入邮箱地址" type="text" v-validate:email="{ isEmail:true }"  v-model="user.email">
+                                <i v-if="!$validation.email.pristine && $validation.email.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                                    <small v-if="$validation.email.isEmail" class="help-block" 
+                                           data-bv-for="email" data-bv-result="NOT_VALIDATED">邮箱格式不正确
+                                    </small>
+                              </div>
+                              
+                            </div>
+                          </div>
+                        
+                        </div>
+                        
+                        <div v-if="isInfo!='0'" class="row ">
+                          
+                           <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+	                            <label class="col-lg-4 control-label font14 text-right"><i class="fa fa-asterisk text-danger"></i>所属组织</label>
+		                        <div class="col-lg-6" style="padding-right:0px">
+		                            <div class="input-group w100">
+		                               <input type="text" style="text-align:left" class="btn btn-default w100" name="orgNames" placeholder="选择所属组织"   v-model="user.orgNames"/>
+		                               <input initial="off" type="hidden" name="orgIds" v-model="user.orgIds" v-validate:orgids="{ required: true}">
+                                  	   <small v-if="$validation.orgids.required" class="help-block" 
+                                           data-bv-for="orgIds" data-bv-result="NOT_VALIDATED">所属组织不能为空
+                                    </small>
+		                            </div>
+		                        </div>
+		                        <div class="col-lg-2" style="padding-left:0px">
+		                                <span class="input-group w100">
+		                                    <button @click="showTree" class="btn btn-danger w100" type="button" >
+		                                        	选择
+		                                    </button>
+		                                </span>
+		                         </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right"><i class="fa fa-asterisk text-danger"></i>角色</label>
+                              <div class="col-lg-8">
+                                <v-select  placeholder="请选择 ..."  style="width:100%;" :options="roles"  :value.sync="roleselect"  multiple>
+                           		</v-select>
+                           		<input type="hidden" name="roleIds" v-model="roleselect" initial="off" v-validate:roleids="{ required: true}">
+                                    <small v-if="$validation.roleids.required" class="help-block" 
+                                           data-bv-for="roleIds" data-bv-result="NOT_VALIDATED">账号角色不能为空
+                                    </small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="row">
+                        
+                        
+                         <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+	                            <label class="col-lg-4 control-label font14 text-right">微信号</label>
+		                        <div class="col-lg-6" style="padding-right:0px">
+		                            <div class="input-group w100">
+		                            	<input initial="off" class="form-control" name="openName" placeholder="选择输入微信昵称" type="text" v-model="user.openName">
+		                            	<input type="hidden" name="openId" v-model="user.openId">
+		                            </div>
+		                        </div>
+		                        <div class="col-lg-2" style="padding-left:0px">
+		                                <span class="input-group w100">
+		                                    <button @click="getOpenId" id="openIdBtn" class="btn btn-danger w100"  type="button" >
+		                                        	验证
+		                                    </button>
+		                                </span>
+		                         </div>
+                            </div>
+                          </div>
+                          
+                          
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right">所属单位</label>
+                              <div class="col-lg-8">
+                                <input initial="off" class="form-control" name="department" placeholder="请输入部门" type="text" v-model="user.department">
+                              </div>
+                              
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group has-feedback">
+                              <label class="col-lg-4 control-label font14 text-right">状态</label>
+                               <div class="radio">
+			                        <!-- Inline Icon Radios Buttons -->
+			                        <label class="form-radio form-icon" :class="{'active':user.state==1}">
+			                        	<input name="state" v-model="user.state" value="1" type="radio" @click="toggleRadio"> 启用
+			                        </label>
+			                        <label class="form-radio form-icon" :class="{'active':user.state==0}">
+			                        	<input name="state" v-model="user.state" value="0" type="radio" @click="toggleRadio"> 禁用
+			                        </label>
+			                    </div>
+		                     </div> 
+                            </div>
+                          </div>
+                          
+                        </div>
+                        
+                        
+                        
+                        <div class="form-group">
+                            <hr>
+                        </div>
+                        
+                        <div class="row thirdpart_account_head" >
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="col-lg-4 control-label font14 text-right">账号信息</label>
+                              <div class="col-lg-8">
+                                <a class="btn btn-tmbai btn-sm" href="javascript:void(0);" @click="addThirdpartAccount">添加</a>
+                              </div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        
+                        <div class="row thirdpart_account_temp temp_index" style="display:none;">
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="col-lg-4 control-label font14 text-right"> 载体</label>
+                              <input type="hidden" class="inputId">
+                              <div class="col-lg-8">
+                                <select class="form-control mediaId">
+                                  
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-4 control-label font14 text-right">账号</label>
+                              <div class="col-lg-8">
+                                <input class="inputAccountName form-control"   placeholder="请输入账号" type="text">
+                              </div>
+                            </div>
+                          </div>
+                          
+                          
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="col-lg-4 control-label font14 text-right">URL</label>
+                              <div class="col-lg-8">
+                                <input class="inputUrl form-control"   placeholder="请输入URL" type="text">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-4 control-label font14 text-right">站点名称</label>
+                              <div class="col-lg-8">
+                                <div class="input-group">
+                                  <input class="form-control w80 inputSiteName"  placeholder="请输入站点名称" type="text">
+                                  <span class="input-group-btn">
+                                              <a class="btn btn-tmbai btn-sm w20" href="javascript:void(0);">删除</a>
+                                            </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <hr>
+                        </div>
+                        
+                        <div class=" text-center" style=" text-align: center;">
+                            <button class="btn btn-tm color-bai3" type="button" v-link="{path:'/org/user'}">取消</button>&#12288;
+                            <button class="btn btn-bian2 btn-labeled" type="button" @click="save">
+                                <span class="btn-label"><i class="fa fa-upload fa-lg"></i></span> 确定
+                            </button>
+                        </div>
+
+                    </validator>
+                </div>
+               </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+ <div id="organization-tree-modal" class="mainnav-menu bootbox modal" tabindex="-1" role="dialog" style="display: none">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" @click="hideTree">×
+                    </button>
+                    <h4 class="modal-title">组织架构</h4></div>
+                <div class="modal-body">
+                    <div class="bootbox-body">
+                        <nav class="vbox vbox1  biank" style=" height:400px;">
+                        
+                            <div class="panel-titlez bianxia  zeta-bgcolor-bai3">
+	                            <form id="treeOfUser-form" action="#" class="form-horizontal bv-form" novalidate="novalidate"> 
+	                                <div class="input-group w160px pull-left"><input id="" class="form-control user" name="orgName"
+	                                                                                 placeholder="输入关键字" type="text"><span
+	                                        class="input-group-btn"><button class="btn btn-tmbai btn-sm" type="button"
+	                                                                        @click="getTreeOfUser"><i
+	                                        class="fa fa-search-plus fa-lg"></i></button></span></div>
+	                            </form>
+                            </div>
+                            <div class="scrollable hover w100" style="margin-top: 53px;">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <ul id="treeOfUser" v-tree="treeOfUser" class=".mainnav-menu list-group orgTree" style="margin-bottom: 0px;">
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-bb-handler="main" type="button" class="btn btn-bian2 submit-form" @click="hideTree">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="modal" id="qrcode-modal-wo-anim" role="dialog" tabindex="-1" aria-labelledby="role-modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="dialog-title"></h4>
+                </div>
+                <div class="modal-body" style="padding-bottom:0px;height: 500px;">
+                  <!--内容-->
+<!--                     <iframe class="huit" src="http://dds.shadsj.com/SnsUser/error.jsp?randomNumber={{user.randoms}}" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto" id="ifm" name="ifm" width="100%" height="99%"></iframe> -->
+                    <!--内容-->
+                </div>     
+            </div>
+        </div>
+    </div>

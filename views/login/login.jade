@@ -1,0 +1,354 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title= title
+    link(href='/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/css/nifty.min.css', rel='stylesheet')
+    link(href='/css/font-awesome.min.css', rel='stylesheet')
+    link(href='/css/pace.min.css', rel='stylesheet')
+    link(href='/css/zeta.css', rel='stylesheet')
+    style.
+      body {background:#EEE;}.wz-steps .active~li a {opacity: 1;}input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {-webkit-appearance: none;}input[type="number"]{-moz-appearance: textfield;}
+  body
+    #container
+      header#navbar(style='background:#fff;position:absolute;z-index:9999;width:100%;')
+        #navbar-container.boxed(style='width:980px;margin:0 auto;height:40px;line-height:40px;background:#fff;')
+          .navbar-header
+            a(href='javascript:void();')
+            div
+              a(href='javascript:void();')
+                span
+                  img(src='http://cdn.shadsj.com/img/notice.png', width='16px')
+                  |  公告: 为了获取更高的视觉体验和交互，建议使用谷歌浏览器以达到最佳兼容效果.
+              a(target='_blank', href='http://baike.baidu.com/link?url=g9H10xLzEeU59M0VQah1WCK3jmfTu7TmyDv08B-QiBKEB6LC1nK5AGuFa6jaaAYS6LuCgGJkN0NelaoVoTTeONomizuSrOT4yjZXHoFFVPuqRB2km_8S86rrpTZeiFQqccRQEG3bCEYDp8bWMcDaaZJEb_wkX2klllgGfga3LAv9E0RBMkYowRAMikEVfpXa')
+                | 什么是谷歌浏览器?
+              a(href='http://cdn.shadsj.com/file/browser/chrome/ChromeStandalone_51.0.2704.106_Setup.exe', title='环境:WinXP/Win2003/Vista/Win7/Win8', style='cursor:pointer;padding:5px 8px 5px 6px;background-color:#f08222;font-size:12px;;color:#fff;line-height:20px;border:1px solid #f08222;border-radius:3px;')
+                i.fa.fa-download
+                | 						下载谷歌浏览器
+              span 版本：51.0.2704.106
+      .boxed
+        #page-content
+          .upcenter(style=' width:700px;margin-top:200px;margin-left:auto;margin-right:auto')
+            .panel
+              .eq-height.clearfix
+                .col-md-5.eq-box-md.text-center.box-vmiddle-wrap.bgbian.txtcolor
+                  // 左===================================================
+                  .box-vmiddle.pad-all
+                    span.icon-wrap.icon-wrap-lg.icon-circle.bg-trans-light
+                      img(src='/img/logo.svg')
+                    h4.text-thin 指挥调度考核评估平台
+                    p ZHIHUI DIAODU KAOHE PINGGU PINGTAI
+                  // 左===================================================
+                .col-md-7.eq-box-md.eq-no-panel
+                  // ===================================================
+                  #demo-main-wz
+                    // 菜单
+                    ul.row.wz-step.wz-icon-bw.wz-nav-off.mar-top
+                      li.col-xs-12
+                        a(data-toggle='tab', href='#demo-main-tab1')
+                          .col-lg-3.text-right
+                            span.icon-wrap.icon-wrap-xs.bg-danger
+                              i.fa.fa-user.fa-lg
+                          .col-lg-9.text-left.font20 用户登录
+                    // 菜单
+                    // progress bar
+                    .progress.progress-xs
+                      .progress-bar.progress-bar-primary
+                    // form
+                    form#login-form.form-horizontal(novalidate='novalidate')
+                      input(type='hidden', name='client_id', value='clientapp')
+                      input(type='hidden', name='client_secret', value='123456')
+                      input(type='hidden', name='grant_type', value='password')
+                      .panel-body
+                        .tab-content
+                          // 登录
+                          #demo-main-tab1.tab-pane
+                            .form-group
+                              label.col-lg-3.control-label 用户名
+                              .col-lg-7
+                                input.form-control(type='text', name='username', placeholder='请输入登录账号.', maxlength='50')
+                            .form-group
+                              label.col-lg-3.control-label 密码
+                              .col-lg-7
+                                input.form-control(type='password', @keyup.13='login', name='password', placeholder='请输入登录密码.', maxlength='32')
+                            hr
+                            //
+                              <div class="form-group">
+                              <label class="col-lg-3 control-label">验证码</label>
+                              <div class="col-lg-4">
+                              <input type="text"  placeholder="验证码" id="validateCodeValue" name="validateCode" class="form-control"  maxlength="4" value="" autocomplete="off">
+                              </div>
+                              <div class="col-lg-3 text-right">
+                            // <img id="vericodeimg" alt="" src="http://127.0.0.1/oauth/vericode">
+                            //
+                              <img src="" id="validateCode"   style="cursor:hand;" title="点击换一张" onclick="javascript:randomidbetter(this)"/>
+                              </div>
+                              </div>
+                            .form-group
+                              label.col-lg-3.control-label 记住用户名
+                              .col-lg-4(style='padding-top: 5px;')
+                                label#remember.form-checkbox.form-icon
+                                  input(type='checkbox')
+                              .col-lg-3.text-right
+                                a(data-toggle='tab', href='#demo-main-tab2')
+                                  .color-bai1(style='padding-top: 7px;') 找回密码
+                          // 找回
+                          #demo-main-tab2.tab-pane.fade.text-center.color-bai1
+                            .form-group.font14(style='padding-top:70px;')
+                              | 如需找回密码，请联系 
+                              a(href='tencent://message/?uin=2380671088&Site=QQ交谈&Menu=yes') 络安客服 
+                            .form-group
+                              label.col-lg-3.control-label
+                              .col-lg-7
+                                a(data-toggle='tab', href='#demo-main-tab1')
+                                  div 返回登录界面
+                      .pull-left.pad-all
+                        .login-message.text-danger(style='display:none;') 用户名或密码错误,请核对登录账号信息！
+                      .pull-right.pad-all
+                        button.btn.btn-success.btn-labeled.btn-sm(type='button', onclick='goLogin();')
+                          span.btn-label
+                            i.fa.fa-edit.fa-lg
+                          | 确定
+    // jQuery [ REQUIRED ]
+    script(src='/libs/jQuery/jquery-2.2.0.min.js')
+    // ignore
+    script(src='/libs/base/base64.js')
+    // ignore
+    script(src='/libs/jQuery/jQuery.cookie.js')
+    // ignore
+    // BootstrapJS [ RECOMMENDED ]
+    script(src='/libs/bootstrap/js/bootstrap.min.js')
+    // ignore
+    // Plugins [ OPTIONAL ]
+    script(src='/libs/jQuery/FastClick.min.js')
+    script(src='/libs/la/vueUI.js')
+    script(type='text/javascript').
+      // $("#systemName").html(vueUI.conf.systemName);
+      //$("#verificationCode").html(Math.random().toString(36).substr(2,4));
+      $('input[name="username"]').val($.cookie("user_name"));
+      if($.cookie("user_name")){
+      $("#remember").prop("checked",true)
+      }
+    script(type='text/javascript').
+      /*
+      * Login JS
+      *
+      */
+      var _unknownErrorText = "服务器繁忙,请稍后重试！";
+      var _noDataText       = "没有查询到符合条件的记录！";
+      var _visiblePages     = 7;
+      var _responseSuccess  = "000000";
+      var faIcon = {
+      valid: 'fa fa-check-circle fa-lg text-success',
+      invalid: 'fa fa-times-circle fa-lg',
+      validating: 'fa fa-refresh'
+      }
+      /**
+      * Page Load Finished !!!
+      */
+      $(document).ready(function(){
+      init();
+      /**
+      * login wizard
+      */
+      $('#demo-main-wz').bootstrapWizard({
+      tabClass    : 'wz-steps',
+      nextSelector  : '.next',
+      previousSelector  : '.previous',
+      onTabClick: function(tab, navigation, index) {
+      return false;
+      },
+      onInit : function(){
+      $('#demo-main-wz').find('.finish').hide().prop('disabled', true);
+      },
+      onTabShow: function(tab, navigation, index) {
+      var $total = navigation.find('li').length;
+      var $current = index+1;
+      var $percent = ($current/$total) * 100;
+      var wdt = 100/$total;
+      var lft = wdt*index;
+      $('#demo-main-wz').find('.progress-bar').css({width:wdt+'%',left:lft+"%", 'position':'relative', 'transition':'all .5s'});
+      // If it's the last tab then hide the last button and show the finish instead
+      if($current >= $total) {
+      $('#demo-main-wz').find('.next').hide();
+      $('#demo-main-wz').find('.finish').show();
+      $('#demo-main-wz').find('.finish').prop('disabled', false);
+      } else {
+      $('#demo-main-wz').find('.next').show();
+      $('#demo-main-wz').find('.finish').hide().prop('disabled', true);
+      }
+      }
+      });
+      $("#authImg").bind({
+      "click":function(){
+      $(this).attr("src",$(this).attr("src")+"?d="+Math.random());
+      }
+      });
+      /**
+      * Login Validator
+      */
+      $('#login-form').bootstrapValidator({
+      feedbackIcons: faIcon,
+      fields: {
+      username: {
+      validators: {
+      notEmpty: {
+      message: '请输入登录账号.'
+      },
+      stringLength: {
+      max: 20,
+      message: '登录账号输入长度限制 （20）'
+      }
+      },
+      trigger:"blur"
+      },
+      password: {
+      validators: {
+      notEmpty: {
+      message: '请输入登录密码.'
+      },
+      stringLength: {
+      max: 20,
+      message: '登录密码输入长度限制 （20）'
+      }
+      },
+      trigger:"blur"
+      }
+      }
+      }).on('success.form.bv', function(e) {//验证通过，表单处理
+      e.preventDefault();
+      // goLogin();
+      });
+      //remember
+      var account= $.cookie('user_name');
+      if(account!=null){
+      var _remember = $("#remember");
+      if(!_remember.hasClass("active")){
+      _remember.addClass("active");
+      }
+      }
+      });
+      function goLogin(){
+      var data=$('#login-form').serialize();
+      var self=this;
+      window.sessionStorage.user_name=$('input[name="username"]').val();
+      window.sessionStorage.user_password=$('input[name="password"]').val();
+      if($("#remember").hasClass("active")){
+      $.cookie("user_name",$('input[name="username"]').val(), { expires: 7 });
+      }else{
+      $.cookie("user_name",$('input[name="username"]').val(), { expires: -1 });
+      }
+      vueUI.ajaxCall({
+      beforeSend:function (XHR){
+      XHR.setRequestHeader('Authorization','Basic ' + Base64.encode(vueUI.conf.client_id + ':' + vueUI.conf.client_secret));////////设置消息头
+      //XHR.setRequestHeader('Postman-Token','f9ecf67a-892d-8325-9da3-721e6842f7c1');
+      },
+      //  url:vueUI.conf.auth_host+"/oauth/vericodevalidate",
+      url:vueUI.conf.auth_host+"/oauth/token",
+      async:true,
+      datatype:"json",
+      type:"post",
+      data:data,
+      contentType:'application/x-www-form-urlencoded',
+      success:function(rsp){
+      window.sessionStorage.access_token=rsp.access_token;
+      window.location.href="/#!/";
+      },
+      error:function(rsp){
+      if(rsp.status!=0){
+      var err=JSON.parse(rsp.responseText);
+      if(err.meta.code==999){
+      vueUI.alert("错误提示",err.meta.message)
+      }
+      }
+      }
+      })
+      }
+      function newGuid(){
+      var guid = "{";
+      for (var i=1; i<=32; i++){
+      var n = Math.floor(Math.random()*16.0).toString(16);
+      guid +=   n;
+      if((i==8)||(i==12)||(i==16)||(i==20))
+      guid += "-";
+      }
+      return guid+"}";
+      }
+      /**
+      * 获取浏览器类型
+      */
+      function browserType(){
+      var userAgent = navigator.userAgent;
+      if (userAgent.indexOf("opr") > -1) {
+      return "Opera"
+      }else if (userAgent.indexOf("QQBrowser") > -1) {
+      return "QQ"
+      }else if (userAgent.indexOf("Firefox") > -1) {
+      return "Firefox";
+      }else if (userAgent.indexOf("Chrome") > -1){
+      return "Chrome";
+      }else if (userAgent.indexOf("Safari") > -1) {
+      return "Safari";
+      }else if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+      return "IE";
+      };
+      }
+      /*
+      * 获取浏览器版本
+      */
+      function getBrowserVersion(){
+      var userAgent = navigator.userAgent;
+      var str = userAgent.split("/");
+      for(i=0;i<str.length;i++ ){
+      if(i == str.length -1){
+      return str[i];
+      }
+      }
+      }
+      var isCompated=false;
+      function isIE(){
+      if(!!window.ActiveXObject || "ActiveXObject" in window){
+      return true;
+      }else{
+      return false;
+      }
+      };
+      function IEVersion(){
+      var rv = -1;
+      if (navigator.appName == 'Microsoft Internet Explorer'){
+      var ua = navigator.userAgent;
+      var re  = new RegExp("MSIE ([0-9]{1,}[\\.0-9]{0,})");
+      if (re.exec(ua) != null){
+      rv = parseFloat( RegExp.$1 );
+      }
+      } else if (navigator.appName == 'Netscape'){
+      var ua = navigator.userAgent;
+      var re  = new RegExp("Trident/.*rv:([0-9]{1,}[\\.0-9]{0,})");
+      if (re.exec(ua) != null){
+      rv = parseFloat( RegExp.$1 );
+      }
+      }
+      return rv;
+      };
+      if (isIE()) {//IE浏览器
+      if (IEVersion() < 9) {
+      isCompated=false;
+      } else {
+      isCompated=true;
+      }
+      }else{
+      isCompated=true;
+      };
+      if(!isCompated){
+      window.location.href='/error/nonsupport.html';
+      }
+      function init(){
+      if(null != document.getElementById('validateCode'))
+      randomidbetter(document.getElementById('validateCode'));
+      }
+      //验证码
+      function randomidbetter(obj) {
+      obj.src = vueUI.conf.auth_host + '/oauth/vericode?'+ new Date;
+      }

@@ -1,0 +1,152 @@
+/**统一*************************************************/
+
+a,
+.page-header,
+#container.footer-fixed #footer
+{
+	color: #58666E;/**文字//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////改颜色**/
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased!important;
+}
+
+
+/**按钮**/
+/***按钮颜色**************************************************************************/
+.btn-bg {
+	background-color: #27C24C;
+	color:#FFF;
+	}
+.btn-bian a {
+	color: #fff !important;
+	}
+.btn-bian {
+	background-color: #27C24C;
+	border-color: rgba(0,0,0,.05);
+	color: #fff !important;
+}
+.btn-bian.text-dark {
+	color: #e48701
+}
+.btn-bian.active, .btn-bian:active, .btn-bian:focus, .btn-bian:hover, .open>.dropdown-toggle.btn-bian {
+	background-color: #1F9B3D;
+	border-color: rgba(0,0,0,.05);
+	color: #fff
+}
+/***按钮2颜色**********/
+.btn-bg2 {
+	background-color: #3BB5E8;
+	color:#FFF;
+	}
+.btn-bian2 a {
+	color: #fff !important;
+	}
+.btn-bian2 {
+	background-color: #3BB5E8;
+	border-color: rgba(0,0,0,.05);
+	color: #fff !important;
+}
+.btn-bian2.text-dark {
+	color: #e48701
+}
+.btn-bian2.active, .btn-bian2:active, .btn-bian2:focus, .btn-bian2:hover, .open>.dropdown-toggle.btn-bian2 {
+	background-color: #1F74F2;
+	border-color: rgba(0,0,0,.05);
+	color: #fff
+}
+
+.page-header {
+	font-weight:100;
+}
+
+.breadcrumb {
+	padding: 0 0 10px 25px;
+	border-bottom: 1px solid RGBA(0,0,0,.1);
+	}
+	
+/**风格背景颜色*************************************************/
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus,/**翻页**/
+#container.mainnav-sm #mainnav-menu>.active-link>a, #container.mainnav-sm #mainnav-menu>.active-sub>a, #container.mainnav-sm #mainnav-menu>.active-link a:hover, #container.mainnav-sm #mainnav-menu>.active-sub a:hover,/**选择状态二级栏目**/
+.bgbian,/**跟随变色**/
+.nano>.nano-pane>.nano-slider,/**下拉条**/
+.pace-running .pace .pace-progress, .pace-running .pace .pace-activity,/**加载条**/
+.navbar-header,/**头部**/
+#navbar-container {
+	background-color: #1F74F2;/**-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////改颜色**/
+}
+
+/**头部菜单╔╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╗**/
+.searchbox>.input-group input:focus {
+	border-color: RGBA(0,0,0,.1);
+}
+.navbar-brand {
+	background-color: transparent
+}
+
+.navbar-top-links>li>a:focus {
+	background-color: transparent
+}
+.navbar-top-links >li >a:hover, .navbar-top-links >.open >a, .navbar-top-links >.open >a:focus {
+	background-color: RGBA(0,0,0,.1);
+}
+
+#container.mainnav-in .brand-title, #container.mainnav-sm .brand-title, #container.mainnav-lg .brand-title, .navbar-top-links .tgl-menu-btn>a, .navbar-top-links .tgl-menu-btn>a:hover, .navbar-top-links .tgl-menu-btn>a:focus,/**菜单按钮**/
+.navbar-brand, .navbar-brand:hover, .navbar-brand:focus,
+.navbar-top-links>li>a,
+.navbar-top-links >li >a:hover, .navbar-top-links >.open >a, .navbar-top-links >.open >a:focus,
+.navbar-top-links .tgl-menu-btn >a, .navbar-top-links .tgl-menu-btn >a:hover, .navbar-top-links .tgl-menu-btn >a:focus {
+	color: #FFF;/**头部图标//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////改颜色**/
+}
+@media (max-width:768px){
+.navbar-content{
+	background-color: RGBA(0,0,0,.1)
+	}
+}
+@media (min-width:768px) {
+.navbar-header {
+	background-color: transparent
+}
+.navbar-header:before {
+	content: '';
+	background-color: RGBA(0,0,0,.05)
+}
+
+.navbar-top-links .tgl-menu-btn>a:focus {
+	background-color: transparent
+}
+}
+/**头部菜单╚╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╝**/
+
+/**左边导航╔╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╗**/
+/**鼠标滑过**/
+.table-hover>tbody>tr:hover>td:first-child,
+#mainnav-menu>li>a:hover, #mainnav-menu>li>a:active, #mainnav-menu>.active-link>a, #mainnav-menu>.active-link>a:hover, #mainnav-menu>.active-sub>a, #mainnav-menu>.active-sub>a:hover, #mainnav-menu ul .active-link a, .menu-popover .sub-menu ul .active-link a,
+#mainnav-menu>.active-link>a,
+#mainnav-menu ul a:hover, .menu-popover .sub-menu ul a:hover,
+.menu-popover .sub-menu ul ul a:hover,
+#container.mainnav-sm #mainnav .mainnav-widget>.show-small a:hover,
+#container.mainnav-sm .shortcut-grid:hover
+{
+	box-shadow: inset 4px 0 0 0 #1F74F2;/**按钮右边条///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////改颜色**/
+}
+
+/**底部 *************************************************/
+#container.footer-fixed #footer {
+	background-color: #EDF1F2;
+	border-top: 1px solid RGBA(0,0,0,.1);
+}
+#footer {
+	background-color: #EDF1F2;
+	border-top: 1px solid RGBA(0,0,0,.1);
+}
+
+/**实体翻页**/
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
+	border-color: RGBA(0,0,0,.1);
+}
+/**线框翻页**/
+.pager li>a:hover, .pager li>a:focus, .pagination>li a:hover, .pagination>li a:focus {
+	background-color: #fff;
+	border-color: RGBA(0,0,0,.3);
+	color: #333;
+	box-shadow: inset 0 0 5px RGBA(0,0,0,.2);
+}

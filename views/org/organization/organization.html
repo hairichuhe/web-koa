@@ -1,0 +1,159 @@
+				<style type="text/css">
+                    .vbox > .scrollable {
+                        width: 100%;
+                    }
+                    input[type="number"] {
+                        -moz-appearance: textfield;
+                    }
+                    .form-horizontal .form-multi-input {
+                        margin-left: 0;
+                    }
+                </style>	
+                    <div class="panel-body" id="setorganization">
+                    <form @submit.prevent v-on:onload="search()" id="query-form" class="form-horizontal" role="form" method="post" action="/organization/query">
+                        <input type="hidden" name="page_pageNo" id="pageNo" value="1" />
+                        <input type="hidden" name="page_pageSize" id="pageSize" value="10" />
+                        <input type="hidden" name="page_order" id="order" value="desc" />
+                        <input type="hidden" name="page_orderBy" id="orderBy" value="id" />
+                        <input type="hidden" name="filter_EQI_state" value="" id="state">
+                        <input type="hidden" name="orgIds" value="" >
+                    
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <div class="input-group w200px pull-left m-y5">
+                                    <input placeholder="输入名称关键字" maxlength="100" name="name" class="form-control" type="text">
+                                      <span class="input-group-btn">
+                                        <button @click="search()" class="btn btn-tmbai btn-sm">检索</button>
+                                      </span>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-7 text-right">
+                                <div class="pull-right">
+                                    <button class="btn btn-tmbai btn-sm" @click="add"><i class="fa fa-plus"></i> 新增</button>
+                                    <button class="btn btn-tmbai btn-sm" @click="enable"><i class="fa-circle-thin fa"></i> 启用</button>
+                                    <button class="btn btn-tmbai btn-sm" @click="disable"><i class="fa fa-minus-circle"></i> 禁用</button>
+                                    <button data-target="" class="btn btn-tmbai btn-sm" v-on:click="goDel"><i class="fa fa-minus"></i> 删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- 列表展示 -->
+                    <vue-grid target="setorganization" v-ref:grid :columns="gridColumns" :visible-pages="4"></vue-grid>
+                        
+    <div class="modal" id="organization-modal" role="dialog" tabindex="-1" aria-labelledby="organization-modal" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button @click="hideadd" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="dialog-title">组织设置</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom:0px">
+            <!--内容-->
+            <form @submit.prevent id="save-form" action="/organization/save" class="form-horizontal bv-form" novalidate="novalidate">      
+            <validator name="validation">
+            <input type="hidden" name="id" value="{{organization.id}}">
+                
+                <div class="form-group has-feedback">
+                     <label class="col-lg-3 control-label font14 text-right">所属组织:</label>
+                     <div class="col-lg-6">   
+                      <input type="text" style="text-align:left" class="btn btn-default w100" name="parentName" placeholder="选择所属组织" v-validate:parentName="{remote:['/organization/isUnqiue',{id:organization.id,parentId:organization.parentId,name:organization.name}]}"  @click="showTree" v-model="organization.parentName"/>
+                      <input type="hidden" name="parentId" v-model="organization.parentId">
+                      <i v-if="!$validation.parentName.pristine && $validation.parentName.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                      <small v-if="$validation.parentName.remote" class="help-block" data-bv-validator="notEmpty"
+		                                       data-bv-for="parentName" data-bv-result="INVALID">组织名称已存在
+		              </small>
+                     </div>                 
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="col-lg-3 control-label font14">组织名称:</label>
+                    <div class="col-lg-6">
+                      <input initial="off" class="form-control" name="name" placeholder="请输入组织名称" type="text" v-validate:name="{ required: true, remote:['/organization/isUnqiue',{id:organization.id,parentId:organization.parentId}]}" v-model="organization.name">
+                      <i v-if="!$validation.name.pristine && $validation.name.valid" class="form-control-feedback fa fa-check-circle fa-lg text-success"></i>
+                      <small v-if="$validation.name.required" class="help-block" data-bv-validator="notEmpty"
+                                       data-bv-for="name" data-bv-result="NOT_VALIDATED">组织名称不能为空
+                      </small>
+                      <small v-if="$validation.name.remote" class="help-block" data-bv-validator="notEmpty"
+		                                       data-bv-for="name" data-bv-result="INVALID">组织名称已存在
+		              </small>
+                    </div>
+                </div>
+                
+                
+               <div class="form-group has-feedback">
+                    <label class="col-lg-3 control-label font14">自定义名称:</label>
+                    <div class="col-lg-6">
+                      <input initial="off" class="form-control" name="customName" placeholder="请输入自定义名称" type="text"  v-model="organization.customName">
+                    </div>
+               </div>
+                
+               <div class="form-group">
+                 <label class="col-lg-3 control-label font14 text-right">状态:</label>
+                 <div class="col-lg-9">                   
+                     <div class="radio">
+                        <!-- Inline Icon Radios Buttons -->
+                        <label class="form-radio form-icon" :class="{'active':organization.state==1}">
+                        	<input name="state" v-model="organization.state" value="1" type="radio" @click="toggleRadio"> 启用
+                        </label>
+                        <label class="form-radio form-icon" :class="{'active':organization.state==0}">
+                        	<input name="state" v-model="organization.state" value="0" type="radio" @click="toggleRadio"> 禁用
+                        </label>
+                    </div>      
+                  </div>                  
+                </div> 
+                 
+                <div class="modal-footer text-center" style="margin:0 -15px; text-align: center;">
+                  <button @click="hideadd" data-dismiss="modal" type="button" class="btn btn-default" id="closeDialog">取消</button>
+                  <button @click="save" type="button" class="btn btn-bian btn-labeled fa fa-check">确定</button>
+                </div>
+            </validator>
+            </form>
+              <!--内容-->
+          </div>     
+        </div>
+      </div>
+    </div>
+
+
+
+    <div id="organization-tree-modal" class="mainnav-menu bootbox modal" tabindex="-1" role="dialog" style="display: none">
+        <div class="modal-dialog">
+            <div class="modal-content">
+             <form @submit.prevent id="treeOfOrg-form" class="form-horizontal bv-form" novalidate="novalidate">
+                <div class="modal-header">
+                    <button class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" @click="hideTree">×
+                    </button>
+                    <h4 class="modal-title">组织架构</h4></div>
+                <div class="modal-body">
+                    <div class="bootbox-body">
+                        <nav class="vbox vbox1  biank" style=" height:400px;">
+                        <form id="treeOfOrg-form" action="#" class="form-horizontal bv-form" novalidate="novalidate">
+                            <div class="panel-titlez bianxia  zeta-bgcolor-bai3">
+                                <div class="input-group w160px pull-left"><input class="form-control" name="orgName"
+                                                                                 placeholder="输入关键字" type="text"><span
+                                        class="input-group-btn"><button class="btn btn-tmbai btn-sm" type="button"
+                                                                        @click="getTreeOfOrg"><i
+                                        class="fa fa-search fa-lg"></i></button></span></div>
+                               </form>
+                            </div>
+                            <div class="scrollable hover" style="margin-top: 53px;">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <ul id="treeOfOrg" v-treeradio="treeOfOrg" class=".mainnav-menu list-group orgTree" style="margin-bottom: 0px;">
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-bb-handler="main" type="button" class="btn btn-bian2 submit-form" @click="hideTree">提交</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
