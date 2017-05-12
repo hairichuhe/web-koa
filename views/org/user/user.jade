@@ -2,7 +2,7 @@ extends ../org
 
 block org
     #setuser.panel-body
-        form#query-form.form-horizontal(@submit.prevent='', v-on:onload='search()', role='form', method='post', action='/user/query')
+        form#user-form.form-horizontal(@submit.prevent='', v-on:onload='search()', role='form', method='post', action='/user/query')
             input#pageNo(type='hidden', name='page_pageNo', value='1')
             input#pageSize(type='hidden', name='page_pageSize', value='10')
             input#order(type='hidden', name='page_order', value='desc')
@@ -35,7 +35,7 @@ block org
         // 列表展示
         #table-top.zeta-table-bk
             table.table-striped.zeta-table(style='table-layout: fixed;')
-                tbody
+                thead
                     tr.table-head
                         th.text-center(style='width:60px;') 序号 
                         th.text-left
@@ -66,34 +66,36 @@ block org
                         th.rank-th.text-center(style='width: 50px;')  删除 
                         th.text-center(style='width:60px;')
                             input(type='checkbox')
-                    tr
-                        td(style='text-align:center') 1
-                        td.text-left(style='overflow-wrap: break-word;')
-                            span(title='管理员') 管理员
-                        td.text-left(style='overflow-wrap: break-word;')
-                            span
-                                .label.label-success.text-lg(title='总公司') 总公司
-                        td.text-left(style='overflow-wrap: break-word;')
-                            span(title='超级管理员') 超级管理员
-                        td.zeta-showno(style='cursor: pointer;')
-                            span
-                        td.zeta-showno(style='cursor: pointer;')
-                            span
-                        td.text-left(style='overflow-wrap: break-word;')
-                            span(title='1910163785@qq.com') 1910163785@qq.com
-                        td.text-center(style='overflow-wrap: break-word;')
-                            span(title='13209876532') 13209876532
-                        td.text-center(style='overflow-wrap: break-word;')
-                            span
-                                span(title='启用') 启用
-                        td.control-table-list.text-center(style='word-wrap:break-word')
-                            a(href='javascript:void(0)')
-                                i.fa-lg.fa-pencil-square-o.fa.btn
-                        td.control-table-list.text-center(style='word-wrap:break-word')
-                            a(href='javascript:void(0)')
-                                i.fa-lg.fa-trash.fa.btn
-                        td.text-center
-                            input(name='checkbox2', value='1', type='checkbox')
+                tbody
+        #table-bottom.row(style='display: block;')
+            div
+                .col-sm-3.pageinfo.font14
+                    | 共
+                    span.totalRecord  0 
+                    | 页 / 跳转到
+                    input#currentPage(size='5', value='1', min='1', max='1000000000', style='border: none;background: #eee;padding: 0 5px 2px 5px;width:50px', type='number')
+                    |  页
+                    button.btn.btn-tmbai.btn-xs GO
+                .col-sm-3.btn-group.text-center.btn-group-sm.page-size-group-btn(data-toggle='buttons')
+                    label.btn.btn-default.btn-sm.pull-right(pagesize='50')
+                        input#option3(name='options', autocomplete='off', type='radio')
+                        | 50条
+                    label.btn.btn-default.btn-sm.pull-right(pagesize='20')
+                        input#option2(name='options', autocomplete='off', type='radio')
+                        | 20条
+                    label.btn.btn-default.btn-sm.pull-right.active(pagesize='10')
+                        input#option2(name='options', autocomplete='off', type='radio')
+                        | 10条
+                nav#pagination-wrapper.col-sm-6.text-right
+                    ul#pagination.pagination-sm.pagination(style='margin:0px;')
+                        li.first
+                            a(href='javascript:void(0);') 首页
+                        li.disabled.prev
+                            a(href='javascript:void(0);') 上一页
+                        li.next
+                            a(href='javascript:void(0);') 下一页
+                        li.last
+                            a(href='javascript:void(0);') 末页
         #catalog-modal.modal(role='dialog', tabindex='-1', aria-labelledby='catalog-modal', aria-hidden='true', style='display: none;')
             .modal-dialog(role='document')
                 .modal-content
@@ -139,3 +141,108 @@ block org
                             .modal-footer.text-center(style='margin:0 -15px')
                                 button#closeDialog.btn.btn-default(@click='hideadd', data-dismiss='modal', type='button') 取消
                                 button.btn.btn-bian.btn-labeled.fa.fa-check(@click='hideadd', type='button') 确定
+    script(type='text/javascript').
+        (function(){
+
+            getUser();
+
+            //获取表格数据
+            function getUser(){
+                var form=$("#user-form");
+                var josn=JSON.stringify($(form).serializeObject());
+                vueUI.ajaxCall({
+                    url:vueUI.conf.host+$(form).attr("action"),
+                    data:josn,
+                    type:"POST",
+                    success:function(rsp){
+                        filetable(rsp.data);
+                        setpage(rsp.data)
+                    }
+                });
+            };
+
+            //填充表格
+            function filetable(data){
+                var r=data.result;
+                var table=$("#setuser table");
+                $("tbody tr",table).remove();
+                for(var i=0;i<r.length;i++){
+                    var row=$("<tr>");
+                    row.append($("<td>").html((data.pageNo-1)*data.pageSize+i+1));
+                    row.append($("<td>").html(r[i].fullname));
+                    row.append($("<td>").html("<div class='label label-success text-lg' title='"+r[i].orgNames+"'>"+r[i].orgNames+"</div>"));
+                    row.append($("<td>").html(r[i].roleNames));
+                    row.append($("<td>").html(r[i].email));
+                    row.append($("<td>").html(r[i].mobile));
+                    if(r[i].state==1){
+                        row.append($("<td>").html("启用"));
+                    }else{
+                        row.append($("<td>").html("停用"));
+                    };
+                    row.append($("<td>").html('<a href="javascript:void(0)"><i class="fa-lg fa-pencil-square-o fa btn"></i></a>'));
+                    row.append($("<td>").html('<a href="javascript:void(0)"><i class="fa-lg fa-trash fa btn"></i></a>'));
+                    row.append($("<td class='text-center'>").html('<input name="checkbox2" value="'+r[i].id+'" type="checkbox">'));
+                    $("tbody",table).append(row);
+                }
+            };
+
+            //设置分页信息
+            function setpage(data){
+                var arr=getPages(data);
+
+                $("#table-bottom span.totalRecord").html(data.totalPages);
+                if(data.hasPre==true){
+                    $("#table-bottom ul#pagination li.first").removeClass("disabled");
+                    $("#table-bottom ul#pagination li.prev").removeClass("disabled")
+                }else{
+                    $("#table-bottom ul#pagination li.first").addClass("disabled");
+                    $("#table-bottom ul#pagination li.prev").addClass("disabled")
+                };
+                if(data.hasNext==true){
+                    $("#table-bottom ul#pagination li.next").removeClass("disabled");
+                    $("#table-bottom ul#pagination li.last").removeClass("disabled")
+                }else{
+                    $("#table-bottom ul#pagination li.next").addClass("disabled");
+                    $("#table-bottom ul#pagination li.last").addClass("disabled")
+                };
+
+                for(var i=0;i<arr.length;i++){
+                    if(arr[i]==data.pageNo){
+                        $("#table-bottom ul#pagination li.prev").after('<li class="page active"><a href="javascript:void(0);">'+arr[i]+'</a></li>');
+                    }else{
+                        $("#table-bottom ul#pagination li.prev").after('<li class="page"><a href="javascript:void(0);">'+arr[i]+'</a></li>');
+                    }
+                }
+            };
+
+            //生成分页信息
+            function getPages(dt){
+                var view=5;
+                var total=dt.totalPages;
+                var now=dt.pageNo;
+                var arr=[];
+                if(total>view){
+                    var half = Math.floor(view / 2);
+                    var start = now - half + 1 - view % 2;
+                    var end = now + half;
+
+                    // handle boundary case
+                    if (start <= 0) {
+                        start = 1;
+                        end = view;
+                    }
+                    if (end > total) {
+                        start = total - view + 1;
+                        end = total;
+                    }
+                    for(var i = start;i<=end;i++){
+                        arr.push(i)
+                    }
+                }else{
+                    for(var i=0;i<total;i++){
+                        arr.push(i+1);
+                    }
+                };
+                return arr.reverse();
+            };
+        })()
